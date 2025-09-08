@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupTileEffect() {
         addSeekBar("Radius", 0f, 100f, 10f) { radius ->
             val shader = Shader.TileMode.MIRROR
-            binding.imageView.setRenderEffect(RenderEffect.createTileEffect(android.graphics.Rect(0, 0, 200, 200)))
+            binding.imageView.setRenderEffect(RenderEffect.createOffsetEffect(radius, radius))
         }
     }
 
