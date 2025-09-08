@@ -1,5 +1,6 @@
 package com.sky.androiddemo
 
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
@@ -19,7 +20,7 @@ import com.sky.androiddemo.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val effects = listOf("No Effect", "Blur", "ColorMatrix", "Offset", "Chain")
+    private val effects = listOf("No Effect", "Blur", "ColorMatrix", "Offset", "Chain", "Bitmap", "Tile")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +55,8 @@ class MainActivity : AppCompatActivity() {
             "ColorMatrix" -> setupColorMatrixEffect()
             "Offset" -> setupOffsetEffect()
             "Chain" -> setupChainEffect()
+            "Bitmap" -> setupBitmapEffect()
+            "Tile" -> setupTileEffect()
         }
     }
 
@@ -133,6 +136,19 @@ class MainActivity : AppCompatActivity() {
         }
         binding.imageView.setRenderEffect(chainEffect)
     }
+
+    private fun setupBitmapEffect() {
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.texture)
+        binding.imageView.setRenderEffect(RenderEffect.createBitmapEffect(bitmap))
+    }
+
+    private fun setupTileEffect() {
+        addSeekBar("Radius", 0f, 100f, 10f) { radius ->
+            val shader = Shader.TileMode.MIRROR
+            binding.imageView.setRenderEffect(RenderEffect.createTileEffect(android.graphics.Rect(0, 0, 200, 200)))
+        }
+    }
+
 
     private fun addSeekBar(label: String, min: Float, max: Float, initial: Float, onUpdate: (Float) -> Unit) {
         val layout = LinearLayout(this)
