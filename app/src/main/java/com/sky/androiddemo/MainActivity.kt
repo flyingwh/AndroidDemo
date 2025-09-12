@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity() {
         }
         // Set initial effect
         updateEffect(effects[0])
+
+        binding.chatButton.setOnClickListener {
+            startActivity(android.content.Intent(this, ChatActivity::class.java))
+        }
     }
 
     private fun updateEffect(effectName: String) {
