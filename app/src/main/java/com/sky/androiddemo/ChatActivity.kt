@@ -79,18 +79,6 @@ class ChatActivity : AppCompatActivity() {
             val options = LlmInference.LlmInferenceOptions.builder()
                 .setModelPath(modelPath)
                 .setMaxTokens(1024)
-                .setResultListener { partialResult, done ->
-                    if (done) {
-                        // Add the final response to the chat
-                        addMessage(partialResult, false)
-                    } else {
-                        // Stream the partial response
-                        updateLastMessage(partialResult)
-                    }
-                }
-                .setErrorListener { error ->
-                    Log.e("ChatActivity", "Error: ${error.message}")
-                }
                 .build()
 
             llmInference = LlmInference.createFromOptions(this, options)
@@ -104,7 +92,13 @@ class ChatActivity : AppCompatActivity() {
         llmInference?.let {
             // Add a placeholder for the model's response
             addMessage("...", false)
-            it.generateResponseAsync(prompt)
+            try {
+                val response = it.generateResponse(prompt)
+                updateLastMessage(response)
+            } catch (e: Exception) {
+                Log.e("ChatActivity", "Error generating response", e)
+                updateLastMessage("Error: ${e.message}")
+            }
         }
     }
 
